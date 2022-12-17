@@ -8,6 +8,23 @@ export const CSSVarObject = {
   keyYPos: 80 + 8,
 };
 
+export const getColor = (color) => {
+  switch (color) {
+    case "accent": {
+      return "MistyRose";
+    }
+    case "alpha": {
+      return "Snow";
+    }
+    case "mod": {
+      return "GainsBoro";
+    }
+    default: {
+      return "yellow";
+    }
+  }
+};
+
 export function calculatePointPosition({
   x = 0,
   y = 0,

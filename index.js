@@ -7,6 +7,7 @@ import {
   calculatePointPosition,
   CSSVarObject,
   calculateKeyboardFrameDimensions,
+  getColor,
 } from "./key-utils.js";
 import { readFile } from "fs/promises";
 import { createSVGWindow } from "svgdom";
@@ -25,23 +26,6 @@ export function getDefinitionsPath() {
 const definitionsPath = getDefinitionsPath();
 const paths = glob.sync(definitionsPath, { absolute: true });
 
-const getColor = (color) => {
-  switch (color) {
-    case "accent": {
-      return "pink";
-    }
-    case "alpha": {
-      return "white";
-    }
-    case "mod": {
-      return "darkgrey";
-    }
-    default: {
-      return "yellow";
-    }
-  }
-};
-
 const readDefinition = async (path) => {
   const file = await readFile(path, "utf-8");
   const json = JSON.parse(file);
@@ -58,7 +42,15 @@ const readDefinition = async (path) => {
     const positions = allKeys.map(calculatePointPosition);
     const svgKeys = positions.map(([x, y], i) => {
       const key = allKeys[i];
-      return { x, y, r: key.r, c: getColor(key.color), w: key.w, h: key.h };
+      return {
+        x,
+        y,
+        r: key.r,
+        ei: key.ei,
+        c: getColor(key.color),
+        w: key.w,
+        h: key.h,
+      };
     });
     const frame = calculateKeyboardFrameDimensions(allKeys);
     createSVG(fileName, frame, svgKeys);
@@ -78,31 +70,43 @@ const createSVG = (fileName, frame, keys) => {
 
   // create canvas
   const canvas = SVG(document.documentElement);
+  const strokeWidth = 6;
   const hPadding = 10;
-  const yPadding = 10;
+  const vPadding = 10;
   const [cw, ch] = [
     hPadding * 2 +
+      strokeWidth * 2 +
       CSSVarObject.keyXPos * frame.width -
       CSSVarObject.keyXSpacing,
-    yPadding * 2 +
+    vPadding * 2 +
+      strokeWidth * 2 +
       CSSVarObject.keyYPos * frame.height -
       CSSVarObject.keyYSpacing,
   ];
   canvas.viewbox(0, 0, cw, ch);
   canvas
-    .rect(cw, ch)
-    .fill({ color: "transparent" })
-    .stroke({ color: "grey", width: 6, linejoin: "round" });
-  const group = canvas
-    .group()
-    .transform({ translateX: hPadding, translateY: yPadding });
+    .rect(cw - strokeWidth * 2, ch - strokeWidth * 2)
+    .move(strokeWidth, strokeWidth)
+    .fill({ color: "whitesmoke" })
+    .stroke({ color: "grey", width: strokeWidth, linejoin: "round" });
+  const group = canvas.group().transform({
+    translateX: hPadding + strokeWidth,
+    translateY: vPadding + strokeWidth,
+  });
   keys.forEach((key) => {
     const [width, height] = [
       CSSVarObject.keyXPos * key.w - CSSVarObject.keyXSpacing,
       CSSVarObject.keyYPos * key.h - CSSVarObject.keyYSpacing,
     ];
-    group
-      .rect(width, height)
+    const isEncoder = key.ei !== undefined;
+    if (isEncoder) {
+      console.log(fileName);
+    }
+
+    const shape = isEncoder
+      ? group.ellipse(width, height)
+      : group.rect(width, height);
+    shape
       .move(key.x - width / 2, key.y - height / 2)
       .rotate(key.r)
       .attr({ "stroke-linejoin": "round" })
