@@ -1,0 +1,28 @@
+{
+  "name": "@the-via/preview-kb",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-via/preview-kb.git"
+  },
+  "author": "olivia",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/the-via/preview-kb/issues"
+  },
+  "homepage": "https://github.com/the-via/preview-kb#readme",
+  "dependencies": {
+    "@svgdotjs/svg.js": "^3.1.2",
+    "@the-via/reader": "^1.1.0",
+    "ajv": "^6.12.3",
+    "glob": "^8.0.3",
+    "svgdom": "^0.1.10",
+    "via-keyboards": "github:the-via/keyboards"
+  }
+}
