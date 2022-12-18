@@ -15,7 +15,6 @@ import { SVG, registerWindow } from "@svgdotjs/svg.js";
 import { writeFileSync } from "fs";
 import glob from "glob";
 import path from "path";
-//const path = process.argv[2];
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,7 +28,6 @@ const paths = glob.sync(definitionsPath, { absolute: true });
 const readDefinition = async (path) => {
   const file = await readFile(path, "utf-8");
   const json = JSON.parse(file);
-  const v3 = isKeyboardDefinitionV3(json);
   const fileName = `${json.name}-${json.productId.toString(16)}`;
   if (isKeyboardDefinitionV3(json)) {
     const viaDefinition = keyboardDefinitionV3ToVIADefinitionV3(json);
@@ -99,10 +97,6 @@ const createSVG = (fileName, frame, keys) => {
       CSSVarObject.keyYPos * key.h - CSSVarObject.keyYSpacing,
     ];
     const isEncoder = key.ei !== undefined;
-    if (isEncoder) {
-      console.log(fileName);
-    }
-
     const shape = isEncoder
       ? group.ellipse(width, height)
       : group.rect(width, height);
