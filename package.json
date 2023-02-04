@@ -21,6 +21,7 @@
     "@svgdotjs/svg.js": "^3.1.2",
     "@the-via/reader": "^1.1.0",
     "ajv": "^6.12.3",
+    "fs-extra": "^11.1.0",
     "glob": "^8.0.3",
     "slash": "^5.0.0",
     "svgdom": "^0.1.10",

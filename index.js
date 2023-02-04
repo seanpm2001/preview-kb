@@ -17,6 +17,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import slash from "slash";
 import glob from "glob";
+import fs from 'fs-extra'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 export function getDefinitionsPath() {
@@ -26,6 +27,8 @@ const definitionsPath = getDefinitionsPath();
 const paths = glob.sync(slash(path.normalize(definitionsPath)), {
   absolute: true,
 });
+
+await fs.ensureDir('previews')
 
 const readDefinition = async (path) => {
   const file = await readFile(path, "utf-8");
