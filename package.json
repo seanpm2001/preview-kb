@@ -5,6 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "refresh-kbs": "npm uninstall --force via-keyboards && npm install --force https://github.com/the-via/keyboards.git",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,7 +20,7 @@
   "homepage": "https://github.com/the-via/preview-kb#readme",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.1.2",
-    "@the-via/reader": "^1.1.0",
+    "@the-via/reader": "^1.5.7",
     "ajv": "^6.12.3",
     "fs-extra": "^11.1.0",
     "glob": "^8.0.3",
