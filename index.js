@@ -13,17 +13,19 @@ import { readFile } from "fs/promises";
 import { createSVGWindow } from "svgdom";
 import { SVG, registerWindow } from "@svgdotjs/svg.js";
 import { writeFileSync } from "fs";
-import glob from "glob";
 import path from "path";
 import { fileURLToPath } from "url";
+import slash from "slash";
+import glob from "glob";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 export function getDefinitionsPath() {
-  return path.join(__dirname, "node_modules/via-keyboards/v3/**/*.json");
+  return path.join(__dirname, "./node_modules/via-keyboards/v3/**/*.json");
 }
 const definitionsPath = getDefinitionsPath();
-const paths = glob.sync(definitionsPath, { absolute: true });
+const paths = glob.sync(slash(path.normalize(definitionsPath)), {
+  absolute: true,
+});
 
 const readDefinition = async (path) => {
   const file = await readFile(path, "utf-8");
@@ -116,5 +118,7 @@ const createSVG = (fileName, frame, keys) => {
     canvas.svg()
   );
 };
+
+console.log(`Generating definitions for ${paths.length} keyboards`);
 
 paths.forEach((path) => readDefinition(path));
